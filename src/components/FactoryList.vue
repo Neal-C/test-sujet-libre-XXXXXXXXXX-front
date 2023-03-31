@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AXIOS_instance from '../axios'
 import { onMounted, ref } from 'vue';
-type Factory = {id: number, factoryName: string}
+import BotForm from './BotForm.vue'
+export type Factory = {id: number, factoryName: string};
     const factories = ref<Factory[]|null>(null);
     onMounted(() => {
         AXIOS_instance.get('factory/')
@@ -10,9 +11,14 @@ type Factory = {id: number, factoryName: string}
             console.log(response.data.results);
         })
     })
+
+    function deleteFactory(id: number){
+        AXIOS_instance.delete('factory/' + id);
+    }
 </script>
 
 <template>
+    <BotForm :factories="factories"></BotForm>
     <ul role='list' className='mt-10 max-w-lg mx-auto min-w-[300px]'>
         <li v-for="{id, factoryName} of factories"
 			className='
@@ -25,7 +31,7 @@ type Factory = {id: number, factoryName: string}
       relative mt-5 p-6 text-gray-900 rounded shadow-md transition-transform hover:-translate-y-2 will-change-transform'>
 			<h3 className='relative flex justify-between align-center'>
 				<span className='text-xl mb-2 font-medium'>{{factoryName}}</span>
-				<router-link to="/botlist/{{id}}" className='relative z-10 top-[6px] pl-4 text-sm cursor-pointer'>
+				<router-link :to="`/botlist/${id}`" className='relative z-10 top-[6px] pl-4 text-sm cursor-pointer'>
 					#DetailView
 				</router-link>
 			</h3>
@@ -33,7 +39,7 @@ type Factory = {id: number, factoryName: string}
 				#{{ factoryName }}
 			</span>
 			<span
-
+                @click="deleteFactory(id)"
 				className=' ml-1 relative z-10 cursor-pointer'>
 				#Delete
 			</span>

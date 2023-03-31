@@ -11,10 +11,11 @@ import { useRoute } from 'vue-router';
             bots.value = response.data.results;
         });
     })
-	console.log("route.params.id ",route.params.id)
-	console.log("route.params ",route.params)
-	console.log("route ", route)
-	console.log("silly typing : ", typeof route.params.id)
+
+	function deleteBot(id:number){
+		AXIOS_instance.delete('bot/' + id)
+	}
+
 </script>
 
 <template>
@@ -35,10 +36,13 @@ import { useRoute } from 'vue-router';
 				</router-link>
 			</h3>
 			<span className='mr-1 relative z-10'>
-				#{{ bot.botName }}
+				#{{ bot.function }}
+			</span>
+			<span className='mr-1 relative z-10'>
+				#{{ bot.date_added }}
 			</span>
 			<span
-
+				@click="deleteBot(bot.id)"
 				className=' ml-1 relative z-10 cursor-pointer'>
 				#Delete
 			</span>
